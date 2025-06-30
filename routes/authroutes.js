@@ -11,7 +11,7 @@ const { createLocation, getAllLocations } = require('../controller/locationContr
 
 
 //Registration router
-router.post('/login' , login);
+router.post('/login', login);
 router.put('/forgot-password', forgotPassword);
 
 

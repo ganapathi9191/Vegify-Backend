@@ -4,15 +4,19 @@ const bcrypt = require('bcrypt');
 
 // Login
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { userOrEmail, password } = req.body;
+
   try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const user = await User.findOne({
+      $or: [{ email: userOrEmail }, { username: userOrEmail }]
+    });
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ message: "Invalid credentials" });
+    if (!match) return res.status(400).json({ message: 'Invalid credentials' });
 
-    res.status(200).json({ message: "Login successful", user });
+    res.status(200).json({ message: 'Login successful', user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -20,11 +24,11 @@ const login = async (req, res) => {
 
 // Forgot Password (without email)
 const forgotPassword = async (req, res) => {
-  const {email, newPassword } = req.body;
+  const { email, newPassword } = req.body;
   try {
-    const user = await User.findOne({email });
+    const user = await User.findOne({ email });
     if (!user) {
-        return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
@@ -36,4 +40,4 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-module.exports = {login, forgotPassword };
+module.exports = { login, forgotPassword };
