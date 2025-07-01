@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const {login, forgotPassword, } = require('../controller/userController');
-const {
-    generateOTP,
-    verifyOTP, 
-    registerAccount
-} = require('../controller/newAccountCont');
+const {generateOTP,verifyOTP, registerAccount} = require('../controller/newAccountCont');
 const { createLocation, getAllLocations } = require('../controller/locationController');
+const notificationController = require('../controller/notificationController');
+
+
 
 
 
@@ -22,8 +21,15 @@ router.post('/verify-otp', verifyOTP);
 
 
 //  Location router
-router.post('/create', createLocation);
-router.get('/all', getAllLocations);
+router.post('/locations', createLocation);
+router.get('/locations', getAllLocations);
+
+
+//Notification router
+router.post('/notification', notificationController.createNotification);
+router.get('/notification/:userId', notificationController.getNotificationsByUser);
+router.put('/notification/read/:id', notificationController.markNotificationAsRead);
+router.delete('/notification/:id', notificationController.deleteNotification);
 
 
 
