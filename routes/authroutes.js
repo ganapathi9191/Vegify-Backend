@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {login, forgotPassword, } = require('../controller/userController');
+const { loginByUsername } = require('../controller/userController');
 const {generateOTP,verifyOTP, registerAccount} = require('../controller/newAccountCont');
 const { createLocation, getAllLocations } = require('../controller/locationController');
 const notificationController = require('../controller/notificationController');
@@ -9,12 +9,10 @@ const notificationController = require('../controller/notificationController');
 
 
 
-//Registration router
-router.post('/login', login);
-router.put('/forgot-password', forgotPassword);
+// 👤 Login with username and password
+router.post('/login', loginByUsername);
 
-
-
+//register
 router.post('/register_Account', registerAccount);
 router.post('/generate-otp', generateOTP);
 router.post('/verify-otp', verifyOTP);
